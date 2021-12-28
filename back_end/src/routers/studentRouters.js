@@ -25,14 +25,14 @@ router.post("/",async(req,res)=>{
 
     Student.findOne({email:email})
     .then((userExist)=>{
-        console.log("user exist data : "+userExist);
+        // console.log("user exist data : "+userExist);
 
         if(userExist){
             return res.status(422).json({error:"email already exist"});
         }
 
         const tempStudent=new Student({name,email,phone,address,password});
-        console.log("temp student : "+tempStudent);
+        // console.log("temp student : "+tempStudent);
 
         tempStudent.save().then(()=>{
             res.status(201).json({message:"user registered successfully"});
@@ -58,6 +58,7 @@ router.post("/signin",async(req,res)=>{
     // res.cookie("test","test");
 
     try{
+        // console.log("req.body : ======> "+req.body.password);
         const {email,password}=req.body;
 
         if(!email || !password){
@@ -66,19 +67,28 @@ router.post("/signin",async(req,res)=>{
 
         const userLogin=await Student.findOne({email:email});
 
-        res.cookie("test","test");
+        // res.cookie("test","test");
         if(userLogin){
 
             // decrypted password 
             const isMatch=await bcrypt.compare(password,userLogin.password);
             
             // generate token 
-            const token = await userLogin.generateAuthToken();
+            let token = await userLogin.generateAuthToken();
+            console.log("token is generated : "+token);
+            console.log("token type : "+typeof token);
+            token=String(token);
 
             // store token in cookies
-            res.cookie("jwtoken",token,{httpOnly:true}).send("cookies configure");
+            // res.cookie("jwtoken",token,{
+            //     expires:new Date(Date.now()+8*3600000),
+            //     httpOnly:true,
+            // });
 
-            res.cookie("test","test");
+            res.cookie("jwtoken",token);
+            res.cookie("temptoken","kashif");
+
+            // res.cookie("test","test");
 
             if(!isMatch){
                 res.status(400);
@@ -105,6 +115,32 @@ router.get("/",middleware,async(req,res)=>{
     }catch(er){
         res.send(er);
     }
-})
+});
+
+
+
+router.post("/kashif",async(req,res)=>{
+    
+    try{
+        const {email,password}=req.body;
+
+        const userLogin=await Student.findOne({email:email});
+        console.log("student info : "+userLogin);
+
+        const token=await userLogin.generateAuthToken();
+        console.log("student token : "+token);
+
+        res.cookie("jwtoken","token",{
+            expires:new Date(Date.now()+6000000),
+            httpOnly:true,
+        });
+
+        res.json({message:"user signin successfully"});
+
+    }catch(err){
+        console.log("error : "+err);
+        res.status(400).send("user not sigin");
+    }
+});
 
 module.exports=router;

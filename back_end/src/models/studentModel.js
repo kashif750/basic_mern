@@ -54,13 +54,15 @@ studentSchema.pre('save',async function(next){
 studentSchema.methods.generateAuthToken=async function(){
 
     try{
-        let token=jwt.sign({_id:this._id},process.env.SECRET_KEY);
+        let token=await jwt.sign({_id:this._id},process.env.SECRET_KEY);
         this.tokens=this.tokens.concat({token});
         // this.tokens=token;
         await this.save();
         return token;
     }catch(err){
-        console.log(err);
+        // console.log(err);
+        res.send("the error port "+err);
+        console.log("the error port " +err);
     }
 
 }//---> generateAuthToken()

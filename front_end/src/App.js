@@ -9,6 +9,7 @@ import Login from './views/Login.js';
 import AboutUs from './views/AboutUs.js';
 import ContactUs from './views/ContactUs.js';
 import Signup from './views/Signup';
+import Logout from './views/Logout';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route exact path="/about-us" element={<AboutUs/>}/>
         <Route exact="true" path="/signup" element={<Signup/>}/>
         <Route exact path="/contact-us" element={<ContactUs/>}/>
+        <Route exact path="/logout" element={<Logout/>}/>
       </Routes>
     </React.Fragment>
     

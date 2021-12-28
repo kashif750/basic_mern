@@ -9,6 +9,7 @@ const Navbar=()=>{
         <NavLink exact to="/about-us">About Us</NavLink>
         <NavLink exact to="/contact-us">Contact Us</NavLink>
         <NavLink exact to="/signup">SignUp</NavLink>
+        <NavLink exact to="/logout">logout</NavLink>
         </React.Fragment>
     )
 }
